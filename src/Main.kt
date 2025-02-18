@@ -21,6 +21,25 @@ fun oneOrTheOther(exp: Boolean): String =
     else
         "False"
 
+class Scientist(val name: String) {
+    override fun toString(): String {
+        return "Scientist('$name')"
+    }
+}
+
+class Counter(var start: Int) {
+    fun increment() {
+        start += 1
+    }
+    override fun toString() = start.toString()
+}
+
+class CounterHolder(counter: Counter) {
+    private val ctr = counter
+    override fun toString() =
+        "CounterHolder: " + ctr
+}
+
 fun main() {
     val name = "Kotlin"
     //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
@@ -94,4 +113,15 @@ fun main() {
     val denominator: Int = 10
     println(numerator % denominator)
     println(numerator / denominator)
+
+    val zeep = Scientist("Zeep Xanflorp")
+    println(zeep)
+
+    val c = Counter(11)
+    val ch = CounterHolder(c)
+    println(ch)
+    c.increment()
+    println(ch)
+    val ch2 = CounterHolder(Counter(9))
+    println(ch2)
 }
