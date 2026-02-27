@@ -88,8 +88,12 @@ fun main() {
     println(oneOrTheOther(z == 1))
     println(oneOrTheOther(z == 2))
 
+// ...
     val answer = 42
+    // String template: `$answer` is replaced with the value of the variable `answer` (here: 42).
     println("Found $answer!")
+    // `$` starts interpolation only if followed by an identifier or `{...}`; since `1` is a digit,
+    // this `$` is treated as a literal dollar sign, so it prints "$1".
     println("printing a $1")
 
     val s = "hi\n" // \n is a newline character
