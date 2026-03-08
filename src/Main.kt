@@ -40,6 +40,67 @@ class CounterHolder(counter: Counter) {
         "CounterHolder: " + ctr
 }
 
+// 1) val vs var + data class
+data class User(val name: String, val age: Int)
+
+fun demoValVarDataClass() {
+    val u1 = User("Ada", 42)
+    val u2 = u1.copy(age = 43)     // creates a new object; u1 stays unchanged
+
+    var counter = 0
+    counter += 1                   // mutable variable
+
+    println("u1=$u1")
+    println("u2=$u2")
+    println("counter=$counter")
+}
+
+// 2) Null-safety: ?, ?., ?:, !!
+
+fun printLength(s: String?) {
+    val len1: Int? = s?.length          // safe-call: null -> null
+    val len2: Int = s?.length ?: 0      // Elvis operator: null -> fallback (0)
+
+    // !! means "I know it's not null" (throws NPE if it actually is null)
+    val len3 = s!!.length
+
+    println("s=$s")
+    println("len1=$len1")
+    println("len2=$len2")
+}
+
+fun demoNullSafety() {
+    printLength("hello")
+
+    try {
+        printLength(null) // will throw because of !!
+    } catch (e: NullPointerException) {
+        println("Caught NPE from '!!': ${e.message ?: "<no message>"}")
+    }
+}
+
+// 3) let: common for nullable handling + scoping
+
+fun greet(name: String?) {
+    name?.let {
+        println("Hello, $it!")          // executes only when name != null
+    } ?: println("No name provided")    // runs when name == null
+}
+
+// Variant with an explicit parameter name (often more readable)
+fun greet2(name: String?) {
+    name?.let { n ->
+        println("Uppercased: ${n.uppercase()}")
+    } ?: println("No name provided")
+}
+
+fun demoLet() {
+    greet("Ada")
+    greet(null)
+    greet2("Bob")
+    greet2(null)
+}
+
 fun main() {
     val name = "Kotlin"
     //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
@@ -88,7 +149,6 @@ fun main() {
     println(oneOrTheOther(z == 1))
     println(oneOrTheOther(z == 2))
 
-// ...
     val answer = 42
     // String template: `$answer` is replaced with the value of the variable `answer` (here: 42).
     println("Found $answer!")
@@ -128,4 +188,8 @@ fun main() {
     println(ch)
     val ch2 = CounterHolder(Counter(9))
     println(ch2)
+
+    demoValVarDataClass()
+    demoNullSafety()
+    demoLet()
 }
