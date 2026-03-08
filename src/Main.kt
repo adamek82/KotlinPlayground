@@ -56,7 +56,6 @@ fun demoValVarDataClass() {
 }
 
 // 2) Null-safety: ?, ?., ?:, !!
-
 fun printLength(s: String?) {
     val len1: Int? = s?.length          // safe-call: null -> null
     val len2: Int = s?.length ?: 0      // Elvis operator: null -> fallback (0)
@@ -80,7 +79,6 @@ fun demoNullSafety() {
 }
 
 // 3) let: common for nullable handling + scoping
-
 fun greet(name: String?) {
     name?.let {
         println("Hello, $it!")          // executes only when name != null
@@ -99,6 +97,69 @@ fun demoLet() {
     greet(null)
     greet2("Bob")
     greet2(null)
+}
+
+// 4) run / apply / also: scope functions with different return values
+fun demoScopeFunctions() {
+    // apply: configures an object; uses `this`; returns the object
+    val sb = StringBuilder().apply {
+        append("Hello")
+        append(", ")
+        append("world")
+    }
+    println("sb='$sb'")
+
+    // also: "do something additionally"; uses `it`; returns the object
+    val list = mutableListOf(1, 2, 3).also {
+        println("Created list of size=${it.size}")
+    }
+    println("list=$list")
+
+    // run: executes a block; returns the block result
+    val result = run {
+        val a = 2
+        val b = 3
+        a * b
+    }
+    println("result=$result")
+}
+
+// 5) Collections: map / filter / associateBy
+
+data class Person(val id: Int, val name: String)
+
+fun demoCollections() {
+    val nums = listOf(1, 2, 3, 4, 5)
+    val squares = nums.map { it * it }          // transforms each element
+    val evens = nums.filter { it % 2 == 0 }     // keeps matching elements
+    val squares2 = nums.map { n -> n * n }      // named lambda arg
+
+    println("nums=$nums")
+    println("squares=$squares")
+    println("evens=$evens")
+    println("squares2=$squares2")
+
+    val people = listOf(Person(1, "Ada"), Person(2, "Bob"))
+    val byId: Map<Int, Person> = people.associateBy { it.id } // id -> person
+
+    println("people=$people")
+    println("byId=$byId")
+    println("byId[1]=${byId[1]}")
+}
+
+// 6) when as an expression (returns a value)
+
+fun classify(x: Any): String =
+    when (x) {
+        is Int -> "int: $x"                         // smart cast to Int
+        is String -> "string(len=${x.length})"      // smart cast to String
+        else -> "other"
+    }
+
+fun demoWhenExpression() {
+    println(classify(123))
+    println(classify("hello"))
+    println(classify(3.14))
 }
 
 fun main() {
@@ -192,4 +253,7 @@ fun main() {
     demoValVarDataClass()
     demoNullSafety()
     demoLet()
+    demoScopeFunctions()
+    demoCollections()
+    demoWhenExpression()
 }
